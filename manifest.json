@@ -19,7 +19,7 @@
     ],
     "background": {
         "page": "background.html",
-        "persistent": false
+        "persistent": true
     },
     "oauth2": {
         "client_id": "565530078861-jc2c3103mm6ebbnhljtm9ifgg372cuu3.apps.googleusercontent.com",
