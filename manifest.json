@@ -1,13 +1,35 @@
 {
     "name": "ChromeExtension-OAuth",
-    "version": "1.0",
+    "version": "1.1",
     "description": "Uses OAuth to connect to Google's Spreadsheet API",
     "manifest_version": 2,
     "browser_action": {
         "default_title": "ChromeExtension-OAuth"
     },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://bumbu.me/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ],
     "background": {
         "page": "background.html",
         "persistent": false
-    }
+    },
+    "oauth2": {
+        "client_id": "565530078861-jc2c3103mm6ebbnhljtm9ifgg372cuu3.apps.googleusercontent.com",
+        "scopes": [
+            "https://www.googleapis.com/auth/spreadsheets"
+        ]
+    },
+    "permissions": [
+        "identity"
+    ],
+    "content_security_policy": "script-src 'self' https://apis.google.com/; object-src 'self'",
+    "key":"MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA0lmkd9CCoQU/pscpKRvru3RYJeCThmarAeiWw22O0k4dtlb3XhFoacCJFGyrAtZiaxmUh9lohhaRD9li3oBtR4wIJI3UL3oEZSfQg8I4cBI6ohlB9oHA2cJJowrb4C9m8CKHTKkBRYCDbWqxkcqXG1SgDg1gdTdGCfJIXyWp7yOS2CwWgewuFPjIk6elYjHby4cALlBaA2ZM56oXCi880PjEwnw7yoJ0h3uBQL/RKGvz/qJkALz6KyT886MrzVll6XF2DOEYzfGFmfnLHv0G3GVOMABs0sGCAuEu76gOwf7pZNUrxmc9VcD8G3HuxUXO8ft2XUT/DwLQSF7yBZjtkQIDAQAB"
 }
