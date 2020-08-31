@@ -1,0 +1,13 @@
+{
+    "name": "ChromeExtension-OAuth",
+    "version": "1.0",
+    "description": "Uses OAuth to connect to Google's Spreadsheet API",
+    "manifest_version": 2,
+    "browser_action": {
+        "default_title": "ChromeExtension-OAuth"
+    },
+    "background": {
+        "page": "background.html",
+        "persistent": false
+    }
+}
