@@ -1,82 +1,80 @@
-<html>
-  <head>
-  <script src="https://apis.google.com/js/api.js"></script>
-    <script async defer src="https://apis.google.com/js/api.js"
-      onload="this.onload=function(){};handleClientLoad()"
-      onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
-  
-  </head>
-  <body>
-    <!--
-    BEFORE RUNNING:
-    ---------------
-    1. If not already done, enable the Google Sheets API
-       and check the quota for your project at
-       https://console.developers.google.com/apis/api/sheets
-    2. Get access keys for your application. See
-       https://developers.google.com/api-client-library/javascript/start/start-js#get-access-keys-for-your-application
-    3. For additional information on authentication, see
-       https://developers.google.com/sheets/api/quickstart/js#step_2_set_up_the_sample
-    -->
-    <script>
-    function makeApiCall() {
-	console.log('MakeAPI CALL')
-      var spreadsheetBody = {
-        // TODO: Add desired properties to the request body.
-      };
+//https://stackoverflow.com/questions/18681803/loading-google-api-javascript-client-library-into-chrome-extension
+//https://bumbu.me/gapi-in-chrome-extension
+chrome.identity.getAuthToken({ interactive: true }, function (token) {
+    console.log('got the token', token);
+})
 
-      var request = gapi.client.sheets.spreadsheets.create({}, spreadsheetBody);
-      request.then(function(response) {
-        // TODO: Change code below to process the `response` object:
-        console.log("Response  "+response.result);
-      }, function(reason) {
-        console.error('error: ' + reason.result.error.message);
-      });
+
+
+const API_KEY = 'AIzaSyAdLftMrzdgpN-G9KRrw_AA3I9i1K3IRu0';
+const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
+const SPREADSHEET_ID = "1Oh8naEHOWDl9gmRZiR1Pl621n-s4Ri04iWguEYS7dUo";
+const SPREADSHEET_TAB_NAME = "Sheet2";
+
+function onGAPILoad() {
+    gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: DISCOVERY_DOCS,
+    });
+}
+
+// Listen for messages from inject.js
+chrome.extension.onMessage.addListener(
+    function (request, sender, sendResponse) {
+        // Get the token
+        chrome.identity.getAuthToken({ interactive: true }, function (token) {
+            // Set GAPI auth token
+            gapi.auth.setToken({
+                'access_token': token,
+            });
+
+            const body = {
+                values: [[
+                    new Date(), // Timestamp
+                    request.title, // Page title
+                    request.url, // Page URl
+                ]]
+            };
+
+            // Append values to the spreadsheet
+            gapi.client.sheets.spreadsheets.values.append({
+                spreadsheetId: SPREADSHEET_ID,
+                range: SPREADSHEET_TAB_NAME,
+                valueInputOption: 'USER_ENTERED',
+                resource: body
+            }).then((response) => {
+                // On success
+                console.log(`${response.result.updates.updatedCells} cells appended.`)
+                sendResponse({ success: true });
+            });
+        })
+
+        // Wait for response
+        return true;
     }
+);
 
-    function initClient() {
-      var API_KEY = 'AIzaSyAdLftMrzdgpN-G9KRrw_AA3I9i1K3IRu0';
 
-      var CLIENT_ID = '703114405550-imoidtkap1sq9uqs47qeerv0r7sj5r24.apps.googleusercontent.com';
+// function onGAPILoad() {
+//     gapi.client.init({
+//         // Don't pass client nor scope as these will init auth2, which we don't want
+//         apiKey: API_KEY,
+//         discoveryDocs: DISCOVERY_DOCS,
+//     }).then(function () {
+//         console.log('gapi initialized')
+//         chrome.identity.getAuthToken({ interactive: true }, function (token) {
+//             gapi.auth.setToken({
+//                 'access_token': token,
+//             });
 
-      // TODO: Authorize using one of the following scopes:
-      //   'https://www.googleapis.com/auth/drive'
-      //   'https://www.googleapis.com/auth/drive.file'
-      //   'https://www.googleapis.com/auth/spreadsheets'
-      var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
-
-      gapi.client.init({
-        'apiKey': API_KEY,
-        'clientId': CLIENT_ID,
-        'scope': SCOPE,
-        'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
-      }).then(function() {
-        gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
-        updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-      });
-    }
-
-    function handleClientLoad() {
-      gapi.load('client:auth2', initClient);
-    }
-
-    function updateSignInStatus(isSignedIn) {
-      if (isSignedIn) {
-        makeApiCall();
-      }
-    }
-
-    function handleSignInClick(event) {
-      gapi.auth2.getAuthInstance().signIn();
-    }
-
-    function handleSignOutClick(event) {
-      gapi.auth2.getAuthInstance().signOut();
-    }
-    </script>
-	
-    <button id="signin-button" onclick="handleSignInClick()">Sign in</button>
-    <button id="signout-button" onclick="handleSignOutClick()">Sign out</button>
-  </body>
-</html>
+//             gapi.client.sheets.spreadsheets.values.get({
+//                 spreadsheetId: "1Oh8naEHOWDl9gmRZiR1Pl621n-s4Ri04iWguEYS7dUo",
+//                 range: "Sheet2",
+//             }).then(function (response) {
+//                 console.log(`Got ${response.result.values.length} rows back`)
+//             });
+//         })
+//     }, function (error) {
+//         console.log('error', error)
+//     });
+// }
