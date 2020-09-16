@@ -23,11 +23,12 @@
         'discoveryDocs': [discoveryUrl],
         'scope': SCOPE
     }).then(function () {
+      console.log("In init Client1")
       GoogleAuth = gapi.auth2.getAuthInstance();
-
+console.log("In init Client2")
       // Listen for sign-in state changes.
       GoogleAuth.isSignedIn.listen(updateSigninStatus);
-
+console.log("In init Client3")
       // Handle initial sign-in state. (Determine if user is already signed in.)
       var user = GoogleAuth.currentUser.get();
       console.log("user")
