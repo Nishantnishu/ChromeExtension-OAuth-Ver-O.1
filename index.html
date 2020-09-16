@@ -1,61 +1,9 @@
 <html>
-<head>
-<script src="https://apis.google.com/js/platform.js?onload=onLoadCallback" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
-</head>
-
-
-
-<body>
-
-
-<script>
-window.onLoadCallback = function(){
-  gapi.auth2.init({
-      client_id: '703114405550-imoidtkap1sq9uqs47qeerv0r7sj5r24.apps.googleusercontent.com'
-    });
-}
-
-
-const API_KEY = 'AIzaSyAdLftMrzdgpN-G9KRrw_AA3I9i1K3IRu0';
-const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
-const SPREADSHEET_ID = "1Oh8naEHOWDl9gmRZiR1Pl621n-s4Ri04iWguEYS7dUo";
-const SPREADSHEET_TAB_NAME = "Sheet2";
-
-gapi.client.sheets.spreadsheets.create({
-  properties: {
-    title: "nishantTesting"
-  }
-}).then((response) => {
-console.log("Created")
-});
-   
-
-
-// function onGAPILoad() {
-//     gapi.client.init({
-//         // Don't pass client nor scope as these will init auth2, which we don't want
-//         apiKey: API_KEY,
-//         discoveryDocs: DISCOVERY_DOCS,
-//     }).then(function () {
-//         console.log('gapi initialized')
-//         chrome.identity.getAuthToken({ interactive: true }, function (token) {
-//             gapi.auth.setToken({
-//                 'access_token': token,
-//             });
-
-//             gapi.client.sheets.spreadsheets.values.get({
-//                 spreadsheetId: "1Oh8naEHOWDl9gmRZiR1Pl621n-s4Ri04iWguEYS7dUo",
-//                 range: "Sheet2",
-//             }).then(function (response) {
-//                 console.log(`Got ${response.result.values.length} rows back`)
-//             });
-//         })
-//     }, function (error) {
-//         console.log('error', error)
-//     });
-// }
-</script>
-
-</body>
+ <head>
+  <title></title>
+  <script src="background.js"></script>
+ </head>
+ <body>
+<script src="https://apis.google.com/js/client.js?onload=onGAPILoad"></script>
+ </body>
 </html>
