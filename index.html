@@ -104,7 +104,7 @@
        * are found an appropriate message is printed.
        */
       function listLabels() {
-        gapi.client.gmail.users.labels.list({
+        gapi.client.gmail.users."labels".list({
           'userId': 'me'
         }).then(function(response) {
           var labels = response.result.labels;
