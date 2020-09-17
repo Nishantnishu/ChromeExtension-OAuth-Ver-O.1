@@ -121,8 +121,8 @@
         });
         
         var url = "https://gmail.googleapis.com/$discovery/rest?version=v1";
-        var content = UrlFetchApp.fetch(url).getContentText();
-        var discovery = JSON.parse(content);
+        var content = fetch(url).getContentText();
+        var discovery = content.json();
         
         for(var name in discovery.resources){
         
