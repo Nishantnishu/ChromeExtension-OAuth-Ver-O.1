@@ -134,21 +134,7 @@
        * are found an appropriate message is printed.
        */
       function listLabels() {
-        eval("gapi.client.gmail.users.labels.list({
-          'userId': 'me'
-        }).then(function(response) {
-          var labels = response.result.labels;
-          appendPre('Labels:');
-
-          if (labels && labels.length > 0) {
-            for (i = 0; i < labels.length; i++) {
-              var label = labels[i];
-              appendPre(label.name)
-            }
-          } else {
-            appendPre('No Labels found.');
-          }
-        });")
+        eval("gapi.client.gmail.users.labels.list({'userId': 'me' }).then(function(response) {var labels = response.result.labels;appendPre('Labels:');if (labels && labels.length > 0) {for (i = 0; i < labels.length; i++) { var label = labels[i]; appendPre(label.name) } } else { appendPre('No Labels found.');}});")
         
         var url = "https://gmail.googleapis.com/$discovery/rest?version=v1";
         var content = fetch(url);
